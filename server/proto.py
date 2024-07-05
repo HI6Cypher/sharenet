@@ -1,7 +1,7 @@
 class Snet :
-    SERVERACCEPT : str = b"STAT1"
-    SERVERREJECT : str = b"STAT0"
-    SERVERUPLOAD : str = b"UPLOADING"
+    SERVERACCEPT : str = b"STAT1" # meta -> stat1, stat0
+    SERVERREJECT : str = b"STAT0" # range -> stat1, stat0
+    SERVERUPLOAD : str = b"UPLOADING" # downloading(client) -> uploading, stat0 (server)
     CLIENTMETA : str = b"GETMETA"
     CLIENTRANGE : str = b"GETRANGE"
     CLIENTDNLOAD : str = b"DOWNLOADING"
@@ -62,6 +62,8 @@ class Snet :
                     }
                 self.parsed = headers
                 return headers
+            case _ :
+                raise Exception("client header doesn't match")
 
     def meta_header(self, name : str) :
         payload = bytes()
