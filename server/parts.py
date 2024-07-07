@@ -1,14 +1,27 @@
 from config import Config
-from os import path
+import os
 class File :
-    def __init__(self, file : str, buffer : int, start : int, end : int, header : bytes) :
-        self.file = file
+    def __init__(self, file_name : str, buffer : int, start : int, end : int) :
+        self.name = file
         self.buf = buffer
         self.start = start
         self.end = end
-        self.head = header
-        self.path = Config.DEFAULTPATH
+        self._file = self.file = file
+        self.path = None
         self.gen = None
+
+    @property
+    def file(self) :
+        return self._file
+
+    @file.setter
+    def file(self, file_name) :
+        path = Config.DEFAULTPATH + file_name
+        if os.path.exists(path) :
+            self.path = path
+            return open(path, "rb")
+        else :
+            raise Exception(f"in {Config.DEFAULTPATH}, file \"{path}\" doesn't exist")
 
     def __iter__(self) :
         self.gen = self.getdata()
@@ -18,18 +31,11 @@ class File :
         return next(self.gen)
 
     def isfile(self) :
-        return True if path.exists(self.path + "/" + self.path) else False
+        return True if os.path.exists(self.path) else False
 
-    def partition(self, n : int) :
-        size = self.end - self.start
-        part = size // n
-        modu = size - (n * part)
-        return part, modu
+    def getsize(self) : #note : cosider that existing of self.path already checked
+        size = os.getsize(self.path)
+        return size
 
-    def getdata(self) :
-        with open(self.path + "/" + self.file, "rb") as file :
-            while True :
-                data = file.read(self.buf)
-                if not data :
-                    break
-                yield data
+    def get_ranged_data(self) :
+        ...

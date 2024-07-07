@@ -39,13 +39,13 @@ class Server :
             self.sock.listen(Config.SERVERBACKLOG)
         except Exception as error :
             self.error[self.init_server.__name__] = error
-            return False
+            raise socket.error(error)
         else :
             string = f"[+] setting socket SO_SNDBUF {Config.SERVERSNDBUF}\n"
             string += "[+] binding on socket\n"
             string += f"[+] listen on socket with {Config.SERVERBACKLOG} backlog"
             self.status.append(string)
-            return True
+            return None
 
     def run_server(self) :
         try :

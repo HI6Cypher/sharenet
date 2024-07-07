@@ -4,4 +4,4 @@ class Config :
     SERVERSNDBUF : int = 1024 #128KB
     SERVERRCVBUF : int = 512
     SERVERTIMEOUT : int = 30
-    DEFAULTPATH : str = "~/shareNet"
+    DEFAULTPATH : str = "~/shareNet/"
